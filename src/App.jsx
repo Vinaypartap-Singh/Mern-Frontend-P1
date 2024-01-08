@@ -7,6 +7,7 @@ import Contact from "./components/pages/Contact";
 import Service from "./components/pages/Service";
 import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
+import Error from "./components/Error";
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
         <Route path="/service" element={<Service />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="*" element={<Error />} />
       </Routes>
     </div>
   );

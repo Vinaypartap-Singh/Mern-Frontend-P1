@@ -1,13 +1,37 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleRegister = () => {
-    console.log(username, email, phone, password);
+  const user = {
+    username,
+    email,
+    phone,
+    password,
+  };
+
+  const handleRegister = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
+
+      if (response.ok) {
+        alert("Your account has been created successfully.");
+        navigate("/login");
+      }
+    } catch (error) {
+      alert(error);
+    }
   };
   return (
     <div>

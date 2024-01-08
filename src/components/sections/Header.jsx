@@ -6,10 +6,13 @@ import {
   Button,
   IconButton,
   Card,
+  Collapse,
 } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
+  const navigate = useNavigate();
   const [openNav, setOpenNav] = React.useState(false);
 
   React.useEffect(() => {
@@ -36,15 +39,14 @@ export default function Header() {
       title: "Contact",
       link: "/contact",
     },
-    {
-      title: "Login",
-      link: "/login",
-    },
   ];
 
   return (
     <div>
-      <Navbar className="sticky top-0 z-10 h-max max-w-full rounded-none px-4 py-2 lg:px-8 lg:py-4">
+      <Navbar
+        shadow={false}
+        className="sticky top-0 z-10 h-max max-w-full rounded-none px-4 py-2 lg:px-8 lg:py-4"
+      >
         <div className="flex items-center justify-between text-blue-gray-900">
           <Typography
             as="a"
@@ -58,7 +60,7 @@ export default function Header() {
               <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
                 {navItems.map(({ title, link }, index) => {
                   return (
-                    <li className="text-sm">
+                    <li key={index} className="text-sm">
                       <Link to={link}>{title}</Link>
                     </li>
                   );
@@ -67,13 +69,15 @@ export default function Header() {
             </div>
             <div className="flex items-center gap-x-1">
               <Button
+                onClick={() => navigate("/register")}
                 variant="text"
                 size="sm"
                 className="hidden lg:inline-block"
               >
-                <span>Log In</span>
+                <span>Sign Up</span>
               </Button>
               <Button
+                onClick={() => navigate("/login")}
                 variant="filled"
                 color="red"
                 size="sm"
@@ -121,21 +125,28 @@ export default function Header() {
             </IconButton>
           </div>
         </div>
-        <MobileNav open={openNav}>
-          <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
+        <Collapse open={openNav}>
+          <ul className="mt-2 mb-4 flex flex-col gap-6 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
             {navItems.map(({ title, link }, index) => {
               return (
-                <li className="text-sm">
+                <li key={index} className="text-sm text-black">
                   <Link to={link}>{title}</Link>
                 </li>
               );
             })}
           </ul>
           <div className="flex items-center gap-x-1">
-            <Button fullWidth variant="text" size="sm" className="">
-              <span>Log In</span>
+            <Button
+              onClick={() => navigate("/register")}
+              fullWidth
+              variant="text"
+              size="sm"
+              className=""
+            >
+              <span>Sign Up</span>
             </Button>
             <Button
+              onClick={() => navigate("/login")}
               fullWidth
               variant="filled"
               color="red"
@@ -145,7 +156,7 @@ export default function Header() {
               <span>Sign in</span>
             </Button>
           </div>
-        </MobileNav>
+        </Collapse>
       </Navbar>
     </div>
   );
