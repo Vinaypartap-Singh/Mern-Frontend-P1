@@ -10,8 +10,10 @@ import {
 } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../store/auth";
 
 export default function Header() {
+  const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
   const [openNav, setOpenNav] = React.useState(false);
 
@@ -68,23 +70,36 @@ export default function Header() {
               </ul>
             </div>
             <div className="flex items-center gap-x-1">
-              <Button
-                onClick={() => navigate("/register")}
-                variant="text"
-                size="sm"
-                className="hidden lg:inline-block"
-              >
-                <span>Sign Up</span>
-              </Button>
-              <Button
-                onClick={() => navigate("/login")}
-                variant="filled"
-                color="red"
-                size="sm"
-                className="hidden lg:inline-block"
-              >
-                <span>Sign in</span>
-              </Button>
+              {isLoggedIn ? (
+                <div>
+                  <Button
+                    onClick={() => navigate("/register")}
+                    variant="text"
+                    size="sm"
+                    className="hidden lg:inline-block"
+                  >
+                    <span>Sign Up</span>
+                  </Button>
+                  <Button
+                    onClick={() => navigate("/login")}
+                    variant="filled"
+                    color="red"
+                    size="sm"
+                    className="hidden lg:inline-block"
+                  >
+                    <span>Sign in</span>
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  onClick={() => navigate("/logout")}
+                  variant="text"
+                  size="sm"
+                  className="hidden lg:inline-block"
+                >
+                  <span>Log Out</span>
+                </Button>
+              )}
             </div>
             <IconButton
               variant="text"
@@ -135,26 +150,41 @@ export default function Header() {
               );
             })}
           </ul>
-          <div className="flex items-center gap-x-1">
-            <Button
-              onClick={() => navigate("/register")}
-              fullWidth
-              variant="text"
-              size="sm"
-              className=""
-            >
-              <span>Sign Up</span>
-            </Button>
-            <Button
-              onClick={() => navigate("/login")}
-              fullWidth
-              variant="filled"
-              color="red"
-              size="sm"
-              className=""
-            >
-              <span>Sign in</span>
-            </Button>
+          <div className="">
+            {isLoggedIn ? (
+              <div className="flex items-center gap-x-1 justify-center">
+                <Button
+                  onClick={() => navigate("/register")}
+                  fullWidth
+                  variant="text"
+                  size="sm"
+                  className="w-1/2"
+                >
+                  <span>Sign Up</span>
+                </Button>
+                <Button
+                  onClick={() => navigate("/login")}
+                  fullWidth
+                  variant="filled"
+                  color="red"
+                  size="sm"
+                  className="w-1/2"
+                >
+                  <span>Sign in</span>
+                </Button>
+              </div>
+            ) : (
+              <Button
+                onClick={() => navigate("/logout")}
+                fullWidth
+                variant="filled"
+                color="red"
+                size="sm"
+                className=""
+              >
+                <span>Log Out</span>
+              </Button>
+            )}
           </div>
         </Collapse>
       </Navbar>

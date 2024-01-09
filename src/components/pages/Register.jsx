@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../store/auth";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -15,6 +16,8 @@ export default function Register() {
     password,
   };
 
+  const { storeinLS } = useAuth();
+
   const handleRegister = async () => {
     try {
       const response = await fetch("http://localhost:3000/api/auth/register", {
@@ -26,6 +29,8 @@ export default function Register() {
       });
 
       if (response.ok) {
+        const response_data = await response.json();
+        storeinLS(response_data.token);
         alert("Your account has been created successfully.");
         navigate("/login");
       }
