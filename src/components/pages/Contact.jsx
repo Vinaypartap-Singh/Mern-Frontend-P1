@@ -1,13 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "../../store/auth";
 
 export default function Contact() {
   const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleForm = () => {
-    console.log(firstname, lastname, email, message);
+  const [userData, setUserData] = useState(true);
+
+  const { user } = useAuth();
+
+  const username = firstname;
+
+  const userContactInfo = {
+    username,
+    email,
+    message,
+  };
+
+  console.log(userContactInfo);
+
+  useEffect(() => {
+    if (userData && user) {
+      setFirstname(user.userData.username);
+      setEmail(user.userData.email);
+    }
+  }, [userData, user]);
+
+  const handleForm = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/form/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userContactInfo),
+      });
+
+      if (response.ok) {
+        alert("Message Sent Successfully");
+      }
+    } catch (error) {
+      alert(error);
+    }
   };
 
   return (
@@ -41,11 +76,7 @@ export default function Contact() {
                 <h2 class="title-font font-semibold text-gray-900 tracking-widest text-xs">
                   EMAIL
                 </h2>
-                <a class="text-indigo-500 leading-relaxed">example@email.com</a>
-                <h2 class="title-font font-semibold text-gray-900 tracking-widest text-xs mt-4">
-                  PHONE
-                </h2>
-                <p class="leading-relaxed">123-456-7890</p>
+                <a class="text-indigo-500 leading-relaxed">{email}</a>
               </div>
             </div>
           </div>
@@ -65,18 +96,7 @@ export default function Contact() {
                 type="text"
                 id="name"
                 name="firstname"
-                class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-              />
-            </div>
-            <div class="relative mb-4">
-              <label for="name" class="leading-7 text-sm text-gray-600">
-                Last Name
-              </label>
-              <input
-                onChange={(text) => setLastname(text.target.value)}
-                type="text"
-                id="name"
-                name="lastname"
+                value={firstname}
                 class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
               />
             </div>
@@ -89,6 +109,7 @@ export default function Contact() {
                 type="email"
                 id="email"
                 name="email"
+                value={email}
                 class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
               />
             </div>

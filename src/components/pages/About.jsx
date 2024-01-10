@@ -1,8 +1,10 @@
 import { Button } from "@material-tailwind/react";
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../store/auth";
 
 export default function About() {
+  const { user } = useAuth();
   return (
     <div>
       <section class="text-gray-600 body-font">
@@ -14,7 +16,7 @@ export default function About() {
           />
           <div class="text-center lg:w-2/3 w-full">
             <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">
-              Microdosing synth tattooed vexillologist
+              {user ? `Welcome ${user.userData.username}` : "Welcome"}
             </h1>
             <p class="mb-8 leading-relaxed">
               Meggings kinfolk echo park stumptown DIY, kale chips beard
